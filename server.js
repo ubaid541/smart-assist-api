@@ -2,6 +2,7 @@ import  express from "express";
 import * as dotenv from "dotenv"
 import cors from "cors"
 import { Configuration,OpenAIApi } from "openai";
+import {generateImage} from "./controller/ImageGenController.js"
 
 dotenv.config()
 
@@ -17,7 +18,7 @@ app.use(express.json())
 
 app.get('/',async (req,res)=>{
     res.status(200).send({
-        message :"Hello from Smart Assist"
+        message :"Hello from AI HUB"
     })
 })
 
@@ -43,5 +44,8 @@ app.post('/',async(req,res)=>{
         res.status(500).send({error})
     }
 })
+
+// AI Image generation
+app.post('/generateImage',generateImage)
 
 app.listen(9000,()=> console.log("Server is running on port 9000"))
