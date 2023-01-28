@@ -25,7 +25,7 @@ const summaryAssist = async (req,res)=>{
         try {
             const response = await openai.createCompletion({
                 model: "text-davinci-003",
-                prompt: `summarize: "${text}", also highlight important keywords and summarize headings as well`,
+                prompt: `summarize: "${text}", also highlight important keywords`,
                 temperature: 0, 
                 max_tokens: 3000, 
                 top_p: 1,
