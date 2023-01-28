@@ -3,6 +3,8 @@ import * as dotenv from "dotenv"
 import cors from "cors"
 import { Configuration,OpenAIApi } from "openai";
 import {generateImage} from "./controller/ImageGenController.js"
+import { codingAssist } from "./controller/CodingAssisController.js";
+import { summaryAssist } from "./controller/SummaryController.js";
 
 dotenv.config()
 
@@ -45,7 +47,14 @@ app.post('/',async(req,res)=>{
     }
 })
 
-// AI Image generation
+// AI Image generator
 app.post('/generateImage',generateImage)
+
+// coding assist
+// app.post('/codingassist',codingAssist)
+
+// summary generator
+app.post('/summarize',summaryAssist)
+
 
 app.listen(9000,()=> console.log("Server is running on port 9000"))
