@@ -1,12 +1,30 @@
 import  express from "express";
 import * as dotenv from "dotenv"
 import cors from "cors"
+import mongoose from "mongoose";
 import { Configuration,OpenAIApi } from "openai";
 import {generateImage} from "./controller/ImageGenController.js"
 import { codingAssist } from "./controller/CodingAssisController.js";
 import { summaryAssist } from "./controller/SummaryController.js";
+import cookieParser from 'cookie-parser'
+import UserController from "./controller/UserController.js";
 
 dotenv.config()
+
+// database connection
+const connect = async ()=>{
+    try {
+        await mongoose.connect(process.env.MONGOBD)
+        console.log("Database connected.");
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+mongoose.connection.on("disconnected",()=>{
+    console.log("Database disconnected.");
+})
+
 
 const configuration =  new Configuration({
     apiKey: process.env.OPENAI_API  //API from OPENAI's  official website
@@ -15,6 +33,9 @@ const configuration =  new Configuration({
 const openai = new OpenAIApi(configuration)
 
 const app = express()
+
+// middlewares
+app.use(cookieParser())
 app.use(cors())
 app.use(express.json())
 
@@ -56,5 +77,34 @@ app.post('/generateImage',generateImage)
 // summary generator
 app.post('/summarize',summaryAssist)
 
+// user registeration
+app.post('/user/register',UserController.register)
 
-app.listen(9000,()=> console.log("Server is running on port 9000"))
+// user login
+app.post('/user/login',UserController.login)
+
+// user logout
+app.post('/user/logout',UserController.logout)
+
+
+
+// error handler middlware
+app.use((err,req,res,next)=>{
+    const errorStatus = err.status || 500
+    const errorMessage = err.message || "Something went wrong."
+    return res.status(errorStatus).json({
+        success: false,
+        status: errorStatus,
+        message: errorMessage,
+        stack : err.stack
+    })
+})
+
+
+app.listen(9000,()=>{
+    connect()
+    console.log("Server is running on port 9000")
+} 
+)
+    
+    
