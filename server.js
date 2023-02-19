@@ -4,6 +4,7 @@ import cors from "cors"
 import mongoose from "mongoose";
 import { Configuration,OpenAIApi } from "openai";
 import {generateImage} from "./controller/ImageGenController.js"
+import {AiContentDetector} from "./controller/AiContentDetector.js"
 import { codingAssist } from "./controller/CodingAssisController.js";
 import { summaryAssist } from "./controller/SummaryController.js";
 import cookieParser from 'cookie-parser'
@@ -76,6 +77,9 @@ app.post('/generateImage',generateImage)
 
 // summary generator
 app.post('/summarize',summaryAssist)
+
+// ai content detector
+app.post('/ai-content-detector',AiContentDetector)
 
 // user registeration
 app.post('/user/register',UserController.register)
