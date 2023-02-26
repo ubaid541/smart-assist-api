@@ -9,6 +9,7 @@ import { codingAssist } from "./controller/CodingAssisController.js";
 import { summaryAssist } from "./controller/SummaryController.js";
 import cookieParser from 'cookie-parser'
 import UserController from "./controller/UserController.js";
+import { contentGenerator } from "./controller/ContentGenerator.js";
 
 dotenv.config()
 
@@ -80,6 +81,9 @@ app.post('/summarize',summaryAssist)
 
 // ai content detector
 app.post('/ai-content-detector',AiContentDetector)
+
+// ai content generator
+app.post('/content-generator',contentGenerator)
 
 // user registeration
 app.post('/user/register',UserController.register)
