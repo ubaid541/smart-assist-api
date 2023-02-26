@@ -8,9 +8,9 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 const contentGenerator = async (req, res) => {
-  const { type, topic, length, tone, audience, keywords, references } =  req.body;
+    const { type = "ideas", topic , length, tone, audience, keywords, references } =  req.body;
 
-  const promptParts = [`Write a ${type} about ${topic}.`];
+  const promptParts = [`Write a ${type === "ideas" ? "list of topic ideas": type} about ${topic}.`];
 
   if (length) {
     promptParts.push(
@@ -40,14 +40,8 @@ const contentGenerator = async (req, res) => {
 
   const prompt = promptParts.join(" ");
 
-  console.log(prompt);
-
-  console.log(req.body);
-
   try {
-    // const prompt = `Write a ${type} about ${topic}.`;
-    // const prompt = `Write a ${type} about ${topic}. The content should be approximately ${length} words long and should have a ${tone} tone, targeted towards a ${audience} audience. Please include the following keywords: ${keywords}. Additionally, please reference the following sources: ${references}.`;
-
+    
     const response = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: prompt,
